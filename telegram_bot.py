@@ -100,7 +100,7 @@ if __name__ == "__main__":
         listen="0.0.0.0",
         port=int(cfg.PORT),
         url_path=cfg.TELEGRAM_TOKEN,
-        webhook_url="https://tranquil-tor-03771.herokuapp.com/" + cfg.TELEGRAM_TOKEN,
+        webhook_url=cfg.HEROKU_URL + cfg.TELEGRAM_TOKEN,
     )
 
     # Wait for the script to be stopped, this will stop the bot as well
