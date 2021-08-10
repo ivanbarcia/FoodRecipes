@@ -78,5 +78,6 @@ def get_cocineros_argentinos(ingredients): # https://cocinerosargentinos.com/bus
 if __name__ == "__main__":
     ingredient = input("Que ingrediente tenes?\n")
     # get_recetas_gratis(ingredient)
-    get_cookpad(ingredient)
+    # get_cookpad(ingredient)
     # get_cocineros_argentinos(ingredient)
+    
