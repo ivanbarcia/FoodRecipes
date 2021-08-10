@@ -35,6 +35,10 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
+def startCommand(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello there!")
+
+
 def recipeCommand(update, context):
     if len(context.args) > 1:
         response = f"⏳ Buscando recetas relacionadas con los ingredientes informados...\n"
@@ -88,6 +92,7 @@ if __name__ == "__main__":
     dispatcher = updater.dispatcher
 
     # on different commands - answer in Telegram
+    dispatcher.add_handler(CommandHandler("start", startCommand))  # Accessed via /start
     dispatcher.add_handler(CommandHandler("receta", recipeCommand))
     dispatcher.add_handler(CommandHandler("ingredientes", ingredientsCommand))
     
