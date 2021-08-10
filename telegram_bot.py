@@ -70,10 +70,12 @@ def ingredientsCommand(update, context):
 if __name__ == "__main__":
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
-    updater = Updater(token=cfg.TELEGRAM_TOKEN)
+    updater = Updater(token=cfg.TELEGRAM_TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
+
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("start", startCommand))  # Accessed via /start
@@ -85,6 +87,8 @@ if __name__ == "__main__":
 
     # Start the bot
     # updater.start_polling()
+
+    # Start Heroku listening 
     updater.start_webhook(
         listen="0.0.0.0",
         port=int(cfg.PORT),
