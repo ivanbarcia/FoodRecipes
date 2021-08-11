@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+from pprint import pprint
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
@@ -12,20 +13,19 @@ def get_recetas_gratis(ingredients): # https://www.recetasgratis.net/busqueda?q=
     res = requests.get(url,headers=headers)
     soup = BeautifulSoup(res.text,'html.parser')
 
-    with open('recetasgratis.csv', 'a', newline='', encoding="utf-8") as f:
-        writer = csv.writer(f)
-        names = soup.select(".resultado")
-        for i in range(len(names)):
-            lst = []
-            try:
-                name = soup.select(".titulo--resultado")[i].get_text().strip()
-                link = soup.select(".titulo--resultado")[i].attrs.get("href")
-            except:
-                name = ""
-            lst = [name,link]
-            writer.writerow(lst)
+    names = soup.select(".resultado")[:3]
+    result = []
 
-    print("Done!!")
+    for i in range(len(names)):
+        try:
+            # name = soup.select(".titulo--resultado")[i].get_text().strip()
+            link = soup.select(".titulo--resultado")[i].attrs.get("href")
+            result.append(link)
+        except:
+            continue
+        
+    pprint(result)
+    return result
 
 def get_cookpad(ingredients): # https://cookpad.com/ar/buscar/tomate?event=search.typed_query
     website = 'https://cookpad.com'
@@ -34,22 +34,20 @@ def get_cookpad(ingredients): # https://cookpad.com/ar/buscar/tomate?event=searc
     url = f'{website}/ar/buscar/{ingredient}`?event=search.typed_query'
     res = requests.get(url,headers=headers)
     soup = BeautifulSoup(res.text,'html.parser')
+    result = []
 
-    with open('cookpad.csv', 'a', newline='', encoding="utf-8") as f:
-        writer = csv.writer(f)
-        names = soup.select("div.flex.flex-col.h-full")
-        for i in range(len(names)):
-            lst = []
-            try:
-                name = soup.select("a.block-link__main")[i].get_text().strip()
-                link = soup.select("a.block-link__main")[i].attrs.get("href")
-                link = website + str(link)
-            except:
-                name = ""
-            lst = [name,link]
-            writer.writerow(lst)
+    names = soup.select("div.flex.flex-col.h-full")[:3]
+    for i in range(len(names)):
+        try:
+            # name = soup.select("a.block-link__main")[i].get_text().strip()
+            link = soup.select("a.block-link__main")[i].attrs.get("href")
+            link = website + str(link)
+            result.append(link)
+        except:
+            continue
 
-    print("Done!!")
+    pprint(result)
+    return result 
 
 def get_cocineros_argentinos(ingredients): # https://cocinerosargentinos.com/busqueda?q=tomate
     website = 'https://cocinerosargentinos.com'
@@ -58,26 +56,42 @@ def get_cocineros_argentinos(ingredients): # https://cocinerosargentinos.com/bus
     url = f'{website}/busqueda?q={ingredient}'
     res = requests.get(url,headers=headers)
     soup = BeautifulSoup(res.text,'html.parser')
+    result = []
 
-    with open('cocinerosargentinos.csv', 'a', newline='', encoding="utf-8") as f:
-        writer = csv.writer(f)
-        names = soup.select("div.item-title")
-        for i in range(len(names)):
-            lst = []
-            try:
-                name = soup.select("div.item-title")[i].get_text().strip()
-                link = names[i].find('a')['href']
-                link = website + str(link)
-            except:
-                name = ""
-            lst = [name,link]
-            writer.writerow(lst)
+    names = soup.select("div.item-title")[:3]
+    for i in range(len(names)):
+        try:
+            # name = soup.select("div.item-title")[i].get_text().strip()
+            link = names[i].find('a')['href']
+            link = website + str(link)
+            result.append(link)
+        except:
+            continue
 
-    print("Done!!")
+    pprint(result)
+    return result
+
+def get_recipes(ingredients):
+    print('BUSCANDO RECETAS...')
+
+    recipes = []
+
+    result = get_recetas_gratis(ingredients)
+    recipes.append(result)
+
+    result = get_cookpad(ingredients)
+    recipes.append(result)
+
+    result = get_cocineros_argentinos(ingredients)
+    recipes.append(result)
+
+    return recipes
 
 if __name__ == "__main__":
     ingredient = input("Que ingrediente tenes?\n")
-    # get_recetas_gratis(ingredient)
-    # get_cookpad(ingredient)
-    # get_cocineros_argentinos(ingredient)
+
+    get_cocineros_argentinos(ingredient)
+
+    print('FIN!')
+    
     

@@ -2,9 +2,13 @@ import logging
 import requests
 import os
 
+from telegram.ext.filters import InvertedFilter
+
 import config as cfg
 from telegram import ParseMode
 from telegram.ext import CommandHandler, Defaults, Updater
+
+from recipe_scrapper import get_recetas_gratis, get_cookpad, get_cocineros_argentinos
 
 # Enable logging
 logging.basicConfig(
@@ -24,7 +28,7 @@ def startCommand(update, context):
 
 
 def recipeCommand(update, context):
-    if len(context.args) > 1:
+    if len(context.args) > 0:
         response = f"⏳ Buscando recetas relacionadas con los ingredientes informados...\n"
         # crypto = context.args[0].upper()
         # sign = context.args[1]
@@ -46,25 +50,42 @@ def recipeCommand(update, context):
 
 
 def ingredientsCommand(update, context):
-    if len(context.args) > 1:
+    if len(context.args) > 0:
         response = f"⏳ Buscando recetas relacionadas con los ingredientes informados...\n"
-        # crypto = context.args[0].upper()
-        # sign = context.args[1]
-        # price = context.args[2]
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
-        # context.job_queue.run_repeating(
-        #     priceAlertCallback,
-        #     interval=15,
-        #     first=15,
-        #     context=[crypto, sign, price, update.message.chat_id],
-        # )
+        for param in context.args:
+            ingredient = param
 
-        # response = f"⏳ I will send you a message when the price of {crypto} reaches ${price}, \n"
-        # response += f"the current price of {crypto} is ${client.get_symbol_ticker(symbol = crypto + 'USDT')['price']}"
+            #1
+            recipes = []
+            recipes = get_recetas_gratis(ingredient)
+            response = f"Recetas encontradas en Recetas Gratis:\n"
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+
+            for recipe in recipes:
+                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+
+            #2
+            recipes = []
+            recipes = get_cookpad(ingredient)
+            response = f"Recetas encontradas en CookPad:\n"
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+
+            for recipe in recipes:
+                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+
+            #3
+            recipes = []
+            recipes = get_cocineros_argentinos(ingredient)
+            response = f"Recetas encontradas en Cocineros Argentinos:\n"
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+
+            for recipe in recipes:
+                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
     else:
         response = "⚠️ Por favor, ingrese por lo menos un ingrediente para continuar...\n"
-
-    context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
 
 if __name__ == "__main__":
@@ -84,17 +105,16 @@ if __name__ == "__main__":
     
     # log all errors
     dispatcher.add_error_handler(error)
-
-    # Start the bot
-    # updater.start_polling()
-
-    # Start Heroku listening 
-    updater.start_webhook(
-        listen="0.0.0.0",
-        port=int(cfg.PORT),
-        url_path=cfg.TELEGRAM_TOKEN,
-        webhook_url=cfg.HEROKU_URL + cfg.TELEGRAM_TOKEN,
-    )
+    
+    if cfg.MODE == 'webhook':
+        # enable webhook
+        updater.start_webhook(listen="0.0.0.0",
+                            port=int(cfg.PORT),
+                            url_path=cfg.TELEGRAM_TOKEN,
+                            webhook_url=cfg.HEROKU_URL + cfg.TELEGRAM_TOKEN)
+    else:
+        # enable polling
+        updater.start_polling()
 
     # Wait for the script to be stopped, this will stop the bot as well
     updater.idle()
