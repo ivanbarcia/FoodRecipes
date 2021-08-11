@@ -38,7 +38,7 @@ def recipeCommand(update, context):
         recipes = []
         recipes = get_recetas_gratis(ingredients)
         response = f"💡 Recetas encontradas en <b>Recetas Gratis</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
         for recipe in recipes:
             context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
@@ -47,7 +47,7 @@ def recipeCommand(update, context):
         recipes = []
         recipes = get_cookpad(ingredients)
         response = f"💡 Recetas encontradas en <b>CookPad</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
         for recipe in recipes:
             context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
@@ -56,7 +56,7 @@ def recipeCommand(update, context):
         recipes = []
         recipes = get_cocineros_argentinos(ingredients)
         response = f"💡 Recetas encontradas en <b>Cocineros Argentinos</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
         for recipe in recipes:
             context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
@@ -76,7 +76,7 @@ def ingredientsCommand(update, context):
         recipes = []
         recipes = get_recetas_gratis(ingredients)
         response = f"💡 Recetas encontradas en <b>Recetas Gratis</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
         for recipe in recipes:
             context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
@@ -85,7 +85,7 @@ def ingredientsCommand(update, context):
         recipes = []
         recipes = get_cookpad(ingredients)
         response = f"💡 Recetas encontradas en <b>CookPad</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
         for recipe in recipes:
             context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
@@ -94,7 +94,7 @@ def ingredientsCommand(update, context):
         recipes = []
         recipes = get_cocineros_argentinos(ingredients)
         response = f"💡 Recetas encontradas en <b>Cocineros Argentinos</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
         for recipe in recipes:
             context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
