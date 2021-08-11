@@ -109,7 +109,7 @@ if __name__ == "__main__":
     if cfg.MODE == 'webhook':
         # enable webhook
         updater.start_webhook(listen="0.0.0.0",
-                            port=int(cfg.PORT),
+                            port=int(os.environ.get('PORT', '5000')),
                             url_path=cfg.TELEGRAM_TOKEN,
                             webhook_url=cfg.HEROKU_URL + cfg.TELEGRAM_TOKEN)
     else:
