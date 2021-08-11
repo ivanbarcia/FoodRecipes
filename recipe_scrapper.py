@@ -90,7 +90,7 @@ def get_recipes(ingredients):
 if __name__ == "__main__":
     ingredient = input("Que ingrediente tenes?\n")
 
-    get_cocineros_argentinos(ingredient)
+    get_recipes(ingredient)
 
     print('FIN!')
     
