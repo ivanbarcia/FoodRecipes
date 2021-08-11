@@ -23,30 +23,46 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-def startCommand(update, context):
+def helpCommand(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hello there!")
 
 
 def recipeCommand(update, context):
     if len(context.args) > 0:
-        response = f"⏳ Buscando recetas relacionadas con los ingredientes informados...\n"
-        # crypto = context.args[0].upper()
-        # sign = context.args[1]
-        # price = context.args[2]
+        ingredients = " ".join(context.args)
+    
+        response = f"⏳ Buscando recetas relacionadas con los ingredientes <b>{ingredients}</b>...\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
-        # context.job_queue.run_repeating(
-        #     priceAlertCallback,
-        #     interval=15,
-        #     first=15,
-        #     context=[crypto, sign, price, update.message.chat_id],
-        # )
+        #1
+        recipes = []
+        recipes = get_recetas_gratis(ingredients)
+        response = f"💡 Recetas encontradas en <b>Recetas Gratis</b>:\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
-        # response = f"⏳ I will send you a message when the price of {crypto} reaches ${price}, \n"
-        # response += f"the current price of {crypto} is ${client.get_symbol_ticker(symbol = crypto + 'USDT')['price']}"
+        for recipe in recipes:
+            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+
+        #2
+        recipes = []
+        recipes = get_cookpad(ingredients)
+        response = f"💡 Recetas encontradas en <b>CookPad</b>:\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+
+        for recipe in recipes:
+            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+
+        #3
+        recipes = []
+        recipes = get_cocineros_argentinos(ingredients)
+        response = f"💡 Recetas encontradas en <b>Cocineros Argentinos</b>:\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+
+        for recipe in recipes:
+            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
     else:
         response = "⚠️ Por favor, ingrese por lo menos un ingrediente para continuar...\n"
-
-    context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
 
 def ingredientsCommand(update, context):
@@ -59,7 +75,7 @@ def ingredientsCommand(update, context):
         #1
         recipes = []
         recipes = get_recetas_gratis(ingredients)
-        response = f"Recetas encontradas en Recetas Gratis:\n"
+        response = f"💡 Recetas encontradas en <b>Recetas Gratis</b>:\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
         for recipe in recipes:
@@ -68,7 +84,7 @@ def ingredientsCommand(update, context):
         #2
         recipes = []
         recipes = get_cookpad(ingredients)
-        response = f"Recetas encontradas en CookPad:\n"
+        response = f"💡 Recetas encontradas en <b>CookPad</b>:\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
         for recipe in recipes:
@@ -77,7 +93,7 @@ def ingredientsCommand(update, context):
         #3
         recipes = []
         recipes = get_cocineros_argentinos(ingredients)
-        response = f"Recetas encontradas en Cocineros Argentinos:\n"
+        response = f"💡 Recetas encontradas en <b>Cocineros Argentinos</b>:\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
         for recipe in recipes:
@@ -98,7 +114,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     # on different commands - answer in Telegram
-    dispatcher.add_handler(CommandHandler("start", startCommand))  # Accessed via /start
+    dispatcher.add_handler(CommandHandler("help", helpCommand))  # Accessed via /help
     dispatcher.add_handler(CommandHandler("receta", recipeCommand))
     dispatcher.add_handler(CommandHandler("ingredientes", ingredientsCommand))
     
