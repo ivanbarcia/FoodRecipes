@@ -51,14 +51,15 @@ def recipeCommand(update, context):
 
 def ingredientsCommand(update, context):
     if len(context.args) > 0:
-        response = f"⏳ Buscando recetas relacionadas con los ingredientes informados...\n"
+        for param in context.args:
+            ingredients = param.replace(" ",'+')
+    
+        response = f"⏳ Buscando recetas relacionadas con los ingredientes {ingredients}...\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
-
-        ingredient = context.args
 
         #1
         recipes = []
-        recipes = get_recetas_gratis(ingredient)
+        recipes = get_recetas_gratis(ingredients)
         response = f"Recetas encontradas en Recetas Gratis:\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
@@ -67,7 +68,7 @@ def ingredientsCommand(update, context):
 
         #2
         recipes = []
-        recipes = get_cookpad(ingredient)
+        recipes = get_cookpad(ingredients)
         response = f"Recetas encontradas en CookPad:\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
@@ -76,7 +77,7 @@ def ingredientsCommand(update, context):
 
         #3
         recipes = []
-        recipes = get_cocineros_argentinos(ingredient)
+        recipes = get_cocineros_argentinos(ingredients)
         response = f"Recetas encontradas en Cocineros Argentinos:\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
