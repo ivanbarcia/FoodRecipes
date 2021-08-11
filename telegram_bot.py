@@ -54,35 +54,34 @@ def ingredientsCommand(update, context):
         response = f"⏳ Buscando recetas relacionadas con los ingredientes informados...\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
-        for param in context.args:
-            ingredient = param
+        ingredient = context.args
 
-            #1
-            recipes = []
-            recipes = get_recetas_gratis(ingredient)
-            response = f"Recetas encontradas en Recetas Gratis:\n"
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        #1
+        recipes = []
+        recipes = get_recetas_gratis(ingredient)
+        response = f"Recetas encontradas en Recetas Gratis:\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
-            for recipe in recipes:
-                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+        for recipe in recipes:
+            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
 
-            #2
-            recipes = []
-            recipes = get_cookpad(ingredient)
-            response = f"Recetas encontradas en CookPad:\n"
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        #2
+        recipes = []
+        recipes = get_cookpad(ingredient)
+        response = f"Recetas encontradas en CookPad:\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
-            for recipe in recipes:
-                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+        for recipe in recipes:
+            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
 
-            #3
-            recipes = []
-            recipes = get_cocineros_argentinos(ingredient)
-            response = f"Recetas encontradas en Cocineros Argentinos:\n"
-            context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        #3
+        recipes = []
+        recipes = get_cocineros_argentinos(ingredient)
+        response = f"Recetas encontradas en Cocineros Argentinos:\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
-            for recipe in recipes:
-                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+        for recipe in recipes:
+            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
     else:
         response = "⚠️ Por favor, ingrese por lo menos un ingrediente para continuar...\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
