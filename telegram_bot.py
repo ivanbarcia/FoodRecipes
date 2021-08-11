@@ -53,8 +53,8 @@ def ingredientsCommand(update, context):
     if len(context.args) > 0:
         ingredients = " ".join(context.args)
     
-        response = f"⏳ Buscando recetas relacionadas con los ingredientes {ingredients}...\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+        response = f"⏳ Buscando recetas relacionadas con los ingredientes <b>{ingredients}</b>...\n"
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
         #1
         recipes = []
