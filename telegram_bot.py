@@ -51,8 +51,10 @@ def recipeCommand(update, context):
 
 def ingredientsCommand(update, context):
     if len(context.args) > 0:
+        ingredients = ''
+
         for param in context.args:
-            ingredients = param.replace(" ",'+')
+            ingredients += param.replace(" ",'+')
     
         response = f"⏳ Buscando recetas relacionadas con los ingredientes {ingredients}...\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
