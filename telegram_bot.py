@@ -24,7 +24,7 @@ def error(update, context):
 def helpCommand(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id, 
-        text="Holas samigos!\n Para poder buscar una receta solo basta con tipear los ingredientes o receta que estan buscando y les va a mostrar las distintas opciones que se encuentren \n Ejemplo: /receta tomate cebolla \n /receta lemonpie \n")
+        text="Hola!\nPara poder buscar una receta solo basta con tipear los ingredientes o receta que estan buscando y les va a mostrar las distintas opciones que se encuentren\nEjemplo: /receta tomate cebolla\n/receta lemonpie\n")
 
 
 def recipeCommand(update, context):
@@ -76,7 +76,7 @@ def recipeCommand(update, context):
             for recipe in recipes:
                 context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
     else:
-        response = "⚠️ Por favor, ingrese por lo menos un ingrediente para continuar...\n"
+        response = "⚠️ Por favor, ingrese por lo menos un ingrediente para continuar...\nEjemplo: /recetas tomate cebolla ajo \n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
 
 
