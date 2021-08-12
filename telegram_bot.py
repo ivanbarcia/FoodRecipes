@@ -1,12 +1,11 @@
 import logging
 import requests
 import os
-
-from telegram.ext.filters import InvertedFilter
-
 import config as cfg
-from telegram import ParseMode
+
 from telegram.ext import CommandHandler, Defaults, Updater
+from telegram.chataction import ChatAction
+from telegram.ext.filters import InvertedFilter
 
 from recipe_scrapper import get_recetas_gratis, get_cookpad, get_cocineros_argentinos
 
@@ -24,7 +23,9 @@ def error(update, context):
 
 
 def helpCommand(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello there!")
+    context.bot.send_message(
+        chat_id=update.effective_chat.id, 
+        text="Holas samigos!\n Para poder buscar una receta solo basta con tipear los ingredientes o receta que estan buscando y les va a mostrar las distintas opciones que se encuentren \n Ejemplo: /receta tomate cebolla \n /receta lemonpie \n")
 
 
 def recipeCommand(update, context):
@@ -34,43 +35,9 @@ def recipeCommand(update, context):
         response = f"⏳ Buscando recetas relacionadas con los ingredientes <b>{ingredients}</b>...\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
-        #1
-        recipes = []
-        recipes = get_recetas_gratis(ingredients)
-        response = f"💡 Recetas encontradas en <b>Recetas Gratis</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
-
-        for recipe in recipes:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
-
-        #2
-        recipes = []
-        recipes = get_cookpad(ingredients)
-        response = f"💡 Recetas encontradas en <b>CookPad</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
-
-        for recipe in recipes:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
-
-        #3
-        recipes = []
-        recipes = get_cocineros_argentinos(ingredients)
-        response = f"💡 Recetas encontradas en <b>Cocineros Argentinos</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
-
-        for recipe in recipes:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
-    else:
-        response = "⚠️ Por favor, ingrese por lo menos un ingrediente para continuar...\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response)
-
-
-def ingredientsCommand(update, context):
-    if len(context.args) > 0:
-        ingredients = " ".join(context.args)
-    
-        response = f"⏳ Buscando recetas relacionadas con los ingredientes <b>{ingredients}</b>...\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
+        # Typing
+        context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING, timeout=1)
+        os.times.sleep(1)
 
         #1
         recipes = []
@@ -116,7 +83,6 @@ if __name__ == "__main__":
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("help", helpCommand))  # Accessed via /help
     dispatcher.add_handler(CommandHandler("receta", recipeCommand))
-    dispatcher.add_handler(CommandHandler("ingredientes", ingredientsCommand))
     
     # log all errors
     dispatcher.add_error_handler(error)
