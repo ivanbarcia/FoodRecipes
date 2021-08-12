@@ -1,11 +1,10 @@
 import logging
-import requests
 import os
 import config as cfg
+import time
 
-from telegram.ext import CommandHandler, Defaults, Updater
+from telegram.ext import CommandHandler, Updater
 from telegram.chataction import ChatAction
-from telegram.ext.filters import InvertedFilter
 
 from recipe_scrapper import get_recetas_gratis, get_cookpad, get_cocineros_argentinos
 
@@ -35,36 +34,47 @@ def recipeCommand(update, context):
         response = f"⏳ Buscando recetas relacionadas con los ingredientes <b>{ingredients}</b>...\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
-        # Typing
-        context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING, timeout=1)
-        os.times.sleep(1)
-
         #1
         recipes = []
         recipes = get_recetas_gratis(ingredients)
-        response = f"💡 Recetas encontradas en <b>Recetas Gratis</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
+        if recipes:
+            response = f"💡 Recetas encontradas en <b>Recetas Gratis</b>:\n"
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
-        for recipe in recipes:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+            # Typing
+            context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING, timeout=1)
+            time.sleep(1)
+
+            for recipe in recipes:
+                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
 
         #2
         recipes = []
         recipes = get_cookpad(ingredients)
-        response = f"💡 Recetas encontradas en <b>CookPad</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
+        if recipes:
+            response = f"💡 Recetas encontradas en <b>CookPad</b>:\n"
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
-        for recipe in recipes:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+            # Typing
+            context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING, timeout=1)
+            time.sleep(1)
+
+            for recipe in recipes:
+                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
 
         #3
         recipes = []
         recipes = get_cocineros_argentinos(ingredients)
-        response = f"💡 Recetas encontradas en <b>Cocineros Argentinos</b>:\n"
-        context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
+        if recipes:
+            response = f"💡 Recetas encontradas en <b>Cocineros Argentinos</b>:\n"
+            context.bot.send_message(chat_id=update.effective_chat.id, text=response, parse_mode="HTML")
 
-        for recipe in recipes:
-            context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
+            # Typing
+            context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING, timeout=1)
+            time.sleep(1)
+
+            for recipe in recipes:
+                context.bot.send_message(chat_id=update.effective_chat.id, text=recipe)
     else:
         response = "⚠️ Por favor, ingrese por lo menos un ingrediente para continuar...\n"
         context.bot.send_message(chat_id=update.effective_chat.id, text=response)
