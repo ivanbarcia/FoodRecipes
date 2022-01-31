@@ -1,0 +1,3 @@
+MODE = ''
+TELEGRAM_TOKEN = ''
+HEROKU_URL = ""
